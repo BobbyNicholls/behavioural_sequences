@@ -13,7 +13,7 @@ def get_skewed_values():
     return int(abs(skewnorm.rvs(10) * 6 + 15))
 
 
-def get_random_sequence() -> Tuple[str, int]:
+def get_behavioural_sequence() -> Tuple[str, int]:
     """Generates a random alphanumeric string representing some generic behavioural sequence.
     :return: A tuple, first element is the behaviour string, the second is the "outcome", some interesting behaviour
     """

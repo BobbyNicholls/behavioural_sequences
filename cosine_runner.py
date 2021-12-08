@@ -16,13 +16,13 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from data_generation import get_random_sequence
+from data_generation import get_behavioural_sequence
 
 SEQUENCES = 500
 
 
 if __name__ == "__main__":
-    behavioural_sequences = [get_random_sequence() for _ in range(SEQUENCES)]
+    behavioural_sequences = [get_behavioural_sequence() for _ in range(SEQUENCES)]
     behavioural_df = pd.DataFrame(
         data=behavioural_sequences, columns=["sequence", "outcome"]
     )
