@@ -9,11 +9,14 @@ from typing import Tuple
 from scipy.stats import skewnorm
 
 
+def get_skewed_index():
+    return int(abs(skewnorm.rvs(10) * 6 + 15))
+
+
 def get_skewed_random_string(str_seq: str, min_len: int = 10, max_len: int = 25) -> str:
-    skewed_index = int(abs(skewnorm.rvs(10) * 6 + 15))
     alpha_len = len(str_seq) - 1
     return "".join(
-        str_seq[min(skewed_index, alpha_len)]
+        str_seq[min(get_skewed_index(), alpha_len)]
         for _ in range(random.randint(min_len, max_len))
     )
 

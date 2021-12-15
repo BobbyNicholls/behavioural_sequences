@@ -18,7 +18,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from data_generation import get_behavioural_sequence
 
-SEQUENCES = 500
+SEQUENCES = 1000
 
 
 def runner():
