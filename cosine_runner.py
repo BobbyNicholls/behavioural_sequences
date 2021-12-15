@@ -8,7 +8,7 @@ Jonathan Lakin
 Given this:
     "Our clients typically have tens of millions of customers and billions of interaction events each day... We use
     machine learning to predict behavioural indicators from vast heterogeneous datasets", how might we consider mapping
-    generic sequences of events to interesting outcomes.
+    generic and encodable sequences of events to interesting outcomes.
 
 """
 
@@ -21,16 +21,23 @@ from data_generation import get_behavioural_sequence
 SEQUENCES = 500
 
 
-if __name__ == "__main__":
-    behavioural_sequences = [get_behavioural_sequence() for _ in range(SEQUENCES)]
+def runner():
+    # generate behavioural sequences
+    sequences = [get_behavioural_sequence() for _ in range(SEQUENCES)]
     behavioural_df = pd.DataFrame(
-        data=behavioural_sequences, columns=["sequence", "outcome"]
+        data=sequences, columns=["sequence", "outcome"]
     )
+
+    # vectorise sequences using tf-idf
     vectoriser = TfidfVectorizer(analyzer="char")
     X = vectoriser.fit_transform(behavioural_df["sequence"])
     df = pd.DataFrame(X.toarray(), columns=vectoriser.get_feature_names())
+
+    # find cosine similarities between behavioural sequences
     cosine_df = pd.DataFrame(cosine_similarity(df))
     cosine_df["outcome"] = behavioural_df["outcome"]
+
+    # compare cosine similarities of behaviours drawn from different distributions
     outcome_positive_df = cosine_df[cosine_df["outcome"] == 1]
     outcome_positive_pos_comp_df = outcome_positive_df[list(outcome_positive_df.index)]
     outcome_positive_neg_comp_df = outcome_positive_df[
@@ -40,5 +47,9 @@ if __name__ == "__main__":
     outcome_positive_neg_comp_df.mean().mean()
     outcome_positive_pos_comp_df.mean().mean()
 
-    sorted_cosine_df = cosine_df.sort_values(["outcome"], ascending=False)
+    return sequences
+
+
+if __name__ == "__main__":
+    behavioural_sequences = runner()
     print(behavioural_sequences)
