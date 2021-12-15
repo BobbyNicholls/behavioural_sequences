@@ -9,8 +9,16 @@ from typing import Tuple
 from scipy.stats import skewnorm
 
 
-def get_skewed_values():
-    return int(abs(skewnorm.rvs(10) * 6 + 15))
+def get_skewed_random_string(string: str, min_len: int = 10, max_len: int = 25) -> str:
+    skewed_index = int(abs(skewnorm.rvs(10) * 6 + 15))
+    alpha_len = len(string) - 1
+    return "".join(string[min(skewed_index, alpha_len)] for _ in range(random.randint(min_len, max_len)))
+
+
+def get_uniform_random_string(string: str, min_len: int = 10, max_len: int = 25) -> str:
+    return "".join(
+        random.choice(string) for _ in range(random.randint(min_len, max_len))
+    )
 
 
 def get_behavioural_sequence() -> Tuple[str, int]:
@@ -21,19 +29,6 @@ def get_behavioural_sequence() -> Tuple[str, int]:
     alpha_numeric_string = string.ascii_lowercase + string.digits
 
     if random.uniform(0, 1) < 0.9:
-        return (
-            "".join(
-                random.choice(alpha_numeric_string)
-                for _ in range(random.randint(10, 25))
-            ),
-            0,
-        )
+        return get_uniform_random_string(alpha_numeric_string), 0
 
-    alpha_len = len(alpha_numeric_string) - 1
-    return (
-        "".join(
-            alpha_numeric_string[min(get_skewed_values(), alpha_len)]
-            for _ in range(random.randint(10, 25))
-        ),
-        1,
-    )
+    return get_skewed_random_string(alpha_numeric_string), 1
